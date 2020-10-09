@@ -17,6 +17,7 @@ import javafx.stage.Stage;
 import lk.ijse.dep.pos.util.ItemTM;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
 public class ItemFormController {
@@ -83,7 +84,11 @@ public class ItemFormController {
         if(selectedItem==null){
             return;
         }
-        itemBO.deleteItem(selectedItem.getItemId());
+        try {
+            itemBO.deleteItem(selectedItem.getItemId());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         loadAllItems();
 
         btnSave.setText("Save");
@@ -105,10 +110,18 @@ public class ItemFormController {
         int qtyOnHand = Integer.parseInt(txtQtyOnHand.getText());
 
         if(btnSave.getText().equals("Update")){
-            itemBO.updateItem(itemId,description,price,qtyOnHand);
+            try {
+                itemBO.updateItem(itemId,description,price,qtyOnHand);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         else{
-            itemBO.saveItem(itemId,description,price,qtyOnHand);
+            try {
+                itemBO.saveItem(itemId,description,price,qtyOnHand);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         btnSave.setDisable(true);
         btnDelete.setDisable(true);
@@ -130,12 +143,22 @@ public class ItemFormController {
 
     public void loadAllItems(){
         tblItemDetails.getItems().clear();
-        List<ItemTM> allItems = itemBO.getAllItems();
+        List<ItemTM> allItems = null;
+        try {
+            allItems = itemBO.getAllItems();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         ObservableList<ItemTM> itemTMS = FXCollections.observableArrayList(allItems);
         tblItemDetails.setItems(itemTMS);
     }
     private void generateId(){
-        String newItemId = itemBO.generateNewItemId();
+        String newItemId = null;
+        try {
+            newItemId = itemBO.generateNewItemId();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
         txtItemID.setText(newItemId);
     }
 

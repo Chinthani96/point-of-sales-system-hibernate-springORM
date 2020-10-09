@@ -19,67 +19,44 @@ public class ItemBOImpl implements ItemBO {
     @Autowired
     private ItemDAO itemDAO;
 
-    public List<ItemTM> getAllItems() {
+    public List<ItemTM> getAllItems() throws Exception {
 
         List<Item> allItems = null;
         List<ItemTM> items = new ArrayList<>();
-        try {
-            allItems = itemDAO.findAll();
-
-        } catch (SQLException e) {
-
-            e.printStackTrace();
-        }
+        allItems = itemDAO.findAll();
         for (Item item : allItems) {
             items.add(new ItemTM(item.getCode(), item.getDescription(), item.getUnitPrice().doubleValue(), item.getQtyOnHand()));
         }
         return items;
     }
 
-    public void saveItem(String code, String description, double unitPrice, int qtyOnHand) {
-        try {
-            itemDAO.save(new Item(code, description, BigDecimal.valueOf(unitPrice), qtyOnHand));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public void saveItem(String code, String description, double unitPrice, int qtyOnHand) throws Exception {
+        itemDAO.save(new Item(code, description, BigDecimal.valueOf(unitPrice), qtyOnHand));
     }
 
-    public void updateItem(String code, String description, double unitPrice, int qtyOnHand) {
-        try {
-            itemDAO.update(new Item(code, description, BigDecimal.valueOf(unitPrice), qtyOnHand));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public void updateItem(String code, String description, double unitPrice, int qtyOnHand) throws Exception {
+        itemDAO.update(new Item(code, description, BigDecimal.valueOf(unitPrice), qtyOnHand));
     }
 
-    public void deleteItem(String code) {
-        try {
-            itemDAO.delete(code);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public void deleteItem(String code) throws Exception {
+        itemDAO.delete(code);
     }
 
-    public String generateNewItemId() {
-        try {
-            String lastItemId = itemDAO.getLastItemId();
-            int lastNumber = Integer.parseInt(lastItemId.substring(1, 4));
-            if (lastNumber == 0) {
-                lastNumber++;
-                return "I001";
-            } else if (lastNumber < 9) {
-                lastNumber++;
-                return "I00" + lastNumber;
-            } else if (lastNumber < 99) {
-                lastNumber++;
-                return "I0" + lastNumber;
-            } else {
-                lastNumber++;
-                return "I" + lastNumber;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
+    public String generateNewItemId() throws SQLException {
+        String lastItemId = itemDAO.getLastItemId();
+        int lastNumber = Integer.parseInt(lastItemId.substring(1, 4));
+        if (lastNumber == 0) {
+            lastNumber++;
+            return "I001";
+        } else if (lastNumber < 9) {
+            lastNumber++;
+            return "I00" + lastNumber;
+        } else if (lastNumber < 99) {
+            lastNumber++;
+            return "I0" + lastNumber;
+        } else {
+            lastNumber++;
+            return "I" + lastNumber;
         }
     }
 }

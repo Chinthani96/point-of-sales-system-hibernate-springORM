@@ -161,7 +161,12 @@ public class OrderDetailsFormController {
     }
 
     private void generateId() {
-        String newOrderId = orderBO.generateNewOrderId();
+        String newOrderId = null;
+        try {
+            newOrderId = orderBO.generateNewOrderId();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
         txtOrderID.setText(newOrderId);
     }
     public void btnAdd_OnAction(ActionEvent actionEvent) {
@@ -187,21 +192,39 @@ public class OrderDetailsFormController {
 
     @SuppressWarnings("Duplicates")
     private void addToOrders(String orderId, String date, CustomerTM customer){
-        orderBO.saveOrder(orderId, Date.valueOf(date),customer);
+        try {
+            orderBO.saveOrder(orderId, Date.valueOf(date),customer);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     @SuppressWarnings("Duplicates")
     private void addToOrderDetail(String orderId,String itemCode,int orderQty,double unitPrice){
-        orderBO.saveOrderDetail(orderId,itemCode,orderQty,unitPrice);
+        try {
+            orderBO.saveOrderDetail(orderId,itemCode,orderQty,unitPrice);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
     private void loadAllCustomers(){
-        List<CustomerTM> allCustomers = customerBO.getAllCustomers();
+        List<CustomerTM> allCustomers = null;
+        try {
+            allCustomers = customerBO.getAllCustomers();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         cmbCustomerId.getItems().clear();
         ObservableList<CustomerTM> customerTMS = FXCollections.observableArrayList(allCustomers);
         cmbCustomerId.setItems(customerTMS);
     }
     private void loadAllItems(){
-        List<ItemTM> allItems = itemBO.getAllItems();
+        List<ItemTM> allItems = null;
+        try {
+            allItems = itemBO.getAllItems();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         cmbItemID.getItems().clear();
         ObservableList<ItemTM> itemTMS = FXCollections.observableArrayList(allItems);
         cmbItemID.setItems(itemTMS);
@@ -224,36 +247,5 @@ public class OrderDetailsFormController {
         mainStage.setScene(mainScene);
         mainStage.centerOnScreen();
     }
-
-//    public void initializeWithSearchOrderForm(String orderId){
-//        txtOrderID.setText(orderId);
-//        readOnly = true;
-//
-//    }
-//    private void loadTable(){
-//        try {
-//            Statement stm = DBConnection.getInstance().getConnection().createStatement();
-//            ResultSet rst = stm.executeQuery("select o.orderId,o.orderDate,o.CustomerID,c.customerName, Sum(d.OrderQTY*i.unitPrice) as Total\n" +
-//                    "from orders o,orderDetail d,item i, customer c\n" +
-//                    "where o.orderId = d.orderId && d.itemCode = i.itemCode && o.CustomerID = c.CustomerID group by o.orderId");
-//            ObservableList<SearchOrderTM> items = tblOrders.getItems();
-//            items.clear();
-//
-//            while (rst.next()){
-//                String orderId = rst.getString(1);
-//                String orderDate = rst.getString(2);
-//                String customerId = rst.getString(3);
-//                String customerName = rst.getString(4);
-//                double total = Double.parseDouble(rst.getString(5));
-//
-//                items.add(new SearchOrderTM(orderId,orderDate,customerId,customerName,total));
-//                ordersArray.add(new SearchOrderTM(orderId,orderDate,customerId,customerName,total));
-//            }
-//
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
 }
 

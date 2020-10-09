@@ -83,8 +83,8 @@ public class CustomerFormController {
         CustomerTM selectedCustomer = tblCustomerDetails.getSelectionModel().getSelectedItem();
         try {
             customerBO.deleteCustomer(selectedCustomer.getCustomerId());
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         btnDelete.setDisable(true);
@@ -111,15 +111,15 @@ public class CustomerFormController {
         if(btnSave.getText().equals("Update")){
             try {
                 customerBO.updateCustomer(customerId,customerName,customerAddress);
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
         else {
             try {
                 customerBO.saveCustomer(customerId,customerName,customerAddress);
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
         //clear textfields
@@ -140,13 +140,23 @@ public class CustomerFormController {
     }
 
     private void generateId(){
-        String newId = customerBO.generateNewCustomerId();
+        String newId = null;
+        try {
+            newId = customerBO.generateNewCustomerId();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
         txtCustomerId.setText(newId);
     }
 
     private void loadAllCustomer(){
         tblCustomerDetails.getItems().clear();
-        List<CustomerTM> allCustomers = customerBO.getAllCustomers();
+        List<CustomerTM> allCustomers = null;
+        try {
+            allCustomers = customerBO.getAllCustomers();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         ObservableList<CustomerTM> customerTMS = FXCollections.observableArrayList(allCustomers);
         tblCustomerDetails.setItems(customerTMS);
     }

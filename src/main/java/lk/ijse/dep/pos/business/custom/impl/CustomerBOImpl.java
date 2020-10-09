@@ -19,51 +19,34 @@ public class CustomerBOImpl implements CustomerBO {
     @Autowired
     private CustomerDAO customerDAO;
 
-    public List<CustomerTM> getAllCustomers() {
+    @Transactional(readOnly = true)
+    public List<CustomerTM> getAllCustomers() throws Exception {
         List<Customer> allCustomers = null;
         List<CustomerTM> customerTMS = new ArrayList<>();
-        try {
             allCustomers = customerDAO.findAll();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
         for (Customer customer : allCustomers) {
             customerTMS.add(new CustomerTM(customer.getId(), customer.getName(), customer.getAddress()));
         }
         return customerTMS;
     }
 
-    public void saveCustomer(String id, String name, String address) throws SQLException {
-        try {
+    public void saveCustomer(String id, String name, String address) throws Exception {
             customerDAO.save(new Customer(id, name, address));
-        } catch (Throwable t) {
-            throw t;
-        }
 
     }
 
-    public void updateCustomer(String id, String name, String address) throws SQLException {
-        try {
+    public void updateCustomer(String id, String name, String address) throws Exception {
             customerDAO.update(new Customer(id, name, address));
-        } catch (Throwable t) {
-            throw t;
-        }
     }
 
-    public void deleteCustomer(String id) throws SQLException {
-        try {
+    public void deleteCustomer(String id) throws Exception {
             customerDAO.delete(id);
-        } catch (Throwable t) {
-            throw t;
-        }
     }
 
-    public String generateNewCustomerId() {
-        try {
+    public String generateNewCustomerId() throws SQLException {
             String lastCustomerId = customerDAO.getLastCustomerId();
             int lastNumber = Integer.parseInt(lastCustomerId.substring(1, 4));
             if (lastNumber == 0) {
-//                lastNumber++;
                 return "C001";
             } else if (lastNumber < 9) {
                 lastNumber++;
@@ -75,9 +58,5 @@ public class CustomerBOImpl implements CustomerBO {
                 lastNumber++;
                 return "C" + lastNumber;
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 }

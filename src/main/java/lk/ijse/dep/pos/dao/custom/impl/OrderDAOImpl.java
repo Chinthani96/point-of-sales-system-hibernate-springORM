@@ -14,7 +14,7 @@ import java.util.List;
 @Repository
 public class OrderDAOImpl extends CrudDAOImpl<Order,String> implements OrderDAO {
     public String lastOrderId() throws SQLException {
-        return (String) session.createNativeQuery("SELECT id FROM `Order` ORDER BY id DESC LIMIT 1").uniqueResult();
+        return (String) getSession().createNativeQuery("SELECT id FROM `Order` ORDER BY id DESC LIMIT 1").uniqueResult();
     }
 
 }

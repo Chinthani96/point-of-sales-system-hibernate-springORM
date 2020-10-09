@@ -72,8 +72,13 @@ public class SearchOrderFormController {
     private void loadTable(){
             ObservableList<SearchOrderTM> items = tblOrders.getItems();
             items.clear();
-            List<SearchOrderTM> orderDetails = orderBO.getOrderDetails();
-            ObservableList<SearchOrderTM> searchOrderTMS= FXCollections.observableArrayList(orderDetails);
+        List<SearchOrderTM> orderDetails = null;
+        try {
+            orderDetails = orderBO.getOrderDetails();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        ObservableList<SearchOrderTM> searchOrderTMS= FXCollections.observableArrayList(orderDetails);
             tblOrders.setItems(searchOrderTMS);
     }
 

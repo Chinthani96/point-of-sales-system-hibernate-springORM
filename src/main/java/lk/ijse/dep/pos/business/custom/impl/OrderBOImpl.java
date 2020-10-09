@@ -30,57 +30,40 @@ public class OrderBOImpl implements OrderBO {
     @Autowired
     private QueryDAO queryDAO;
 
-    public void saveOrder(String id, Date date, CustomerTM customer) {
-        try {
-            orderDAO.save(new Order(id, date, new Customer(customer.getCustomerId(), customer.getCustomerName(), customer.getCustomerAddress())));
-        } catch (SQLException e) {
-            e.printStackTrace();
+    public void saveOrder(String id, Date date, CustomerTM customer) throws Exception {
+        orderDAO.save(new Order(id, date, new Customer(customer.getCustomerId(), customer.getCustomerName(), customer.getCustomerAddress())));
+    }
+
+    public void saveOrderDetail(String orderId, String itemCode, int qty, double unitPrice) throws Exception {
+        orderDetailDAO.save(new OrderDetail(orderId, itemCode, qty, BigDecimal.valueOf(unitPrice)));
+        Item item = itemDAO.find(itemCode);
+        item.setQtyOnHand(item.getQtyOnHand() - qty);
+    }
+
+    public String generateNewOrderId() throws SQLException {
+        String lastOrderId = orderDAO.lastOrderId();
+
+        int lastNumber = Integer.parseInt(lastOrderId.substring(2, 5));
+        if (lastNumber <= 0) {
+            lastNumber++;
+            return "OD001";
+        } else if (lastNumber < 9) {
+            lastNumber++;
+            return "OD00" + lastNumber;
+        } else if (lastNumber < 99) {
+            lastNumber++;
+            return "OD0" + lastNumber;
+        } else {
+            lastNumber++;
+            return "OD" + lastNumber;
         }
     }
 
-    public void saveOrderDetail(String orderId, String itemCode, int qty, double unitPrice) {
-        try {
-            orderDetailDAO.save(new OrderDetail(orderId, itemCode, qty, BigDecimal.valueOf(unitPrice)));
-            Item item = itemDAO.find(itemCode);
-            item.setQtyOnHand(item.getQtyOnHand() - qty);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public String generateNewOrderId() {
-        try {
-            String lastOrderId = orderDAO.lastOrderId();
-
-            int lastNumber = Integer.parseInt(lastOrderId.substring(2, 5));
-            if (lastNumber <= 0) {
-                lastNumber++;
-                return "OD001";
-            } else if (lastNumber < 9) {
-                lastNumber++;
-                return "OD00" + lastNumber;
-            } else if (lastNumber < 99) {
-                lastNumber++;
-                return "OD0" + lastNumber;
-            } else {
-                lastNumber++;
-                return "OD" + lastNumber;
-            }
-        } catch (SQLException e) {
-
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public List<SearchOrderTM> getOrderDetails() {
+    public List<SearchOrderTM> getOrderDetails() throws Exception {
         List<CustomEntity> orderDetails = null;
         List<SearchOrderTM> searchOrderTMS = new ArrayList<>();
-        try {
-            orderDetails = queryDAO.getOrderDetails();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+        orderDetails = queryDAO.getOrderDetails();
         for (CustomEntity orderDetail : orderDetails) {
             searchOrderTMS.add(new SearchOrderTM(orderDetail.getOrderId(), orderDetail.getOrderDate().toString(), orderDetail.getCustomerId(), orderDetail.getCustomerName(), orderDetail.getTotal().doubleValue()));
             return searchOrderTMS;

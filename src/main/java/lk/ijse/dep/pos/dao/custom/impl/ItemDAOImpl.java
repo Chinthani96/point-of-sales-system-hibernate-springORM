@@ -11,6 +11,6 @@ import java.sql.SQLException;
 @Repository
 public class ItemDAOImpl extends CrudDAOImpl<Item, String> implements ItemDAO {
     public String getLastItemId() throws SQLException {
-        return (String) session.createNativeQuery("SELECT code FROM Item ORDER BY code DESC LIMIT 1").uniqueResult();
+        return (String) getSession().createNativeQuery("SELECT code FROM Item ORDER BY code DESC LIMIT 1").uniqueResult();
     }
 }

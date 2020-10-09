@@ -2,14 +2,18 @@ package lk.ijse.dep.pos.dao;
 
 import lk.ijse.dep.pos.entity.SuperEntity;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
-import java.sql.SQLException;
+import java.lang.Exception;
 import java.util.List;
 
 public abstract class CrudDAOImpl<T extends SuperEntity, ID extends Serializable> implements CrudDAO<T,ID> {
-    protected Session session;
+
+    @Autowired
+    private SessionFactory sessionFactory;
     private Class<T> entity;
 
     public CrudDAOImpl() {
@@ -17,33 +21,32 @@ public abstract class CrudDAOImpl<T extends SuperEntity, ID extends Serializable
     }
 
     @Override
-    public List<T> findAll() throws SQLException {
-        return session.createQuery("FROM " + entity.getName()).list();
+    public List<T> findAll() throws Exception {
+        return getSession().createQuery("FROM " + entity.getName()).list();
     }
 
     @Override
-    public T find(ID pk) throws SQLException {
-        return session.get(entity,pk);
+    public T find(ID pk) throws Exception {
+        return getSession().get(entity,pk);
     }
 
     @Override
-    public void save(T entity) throws SQLException {
-        session.save(entity);
+    public void save(T entity) throws Exception {
+        getSession().save(entity);
     }
 
     @Override
-    public void update(T entity) throws SQLException {
-        session.update(entity);
+    public void update(T entity) throws Exception {
+        getSession().update(entity);
     }
 
     @Override
-    public void delete(ID pk) throws SQLException {
-        session.delete(session.load(entity,pk));
+    public void delete(ID pk) throws Exception {
+        getSession().delete(getSession().load(entity,pk));
     }
 
-
     @Override
-    public void setSession(Session session) {
-        this.session = session;
+    public Session getSession() {
+        return sessionFactory.getCurrentSession();
     }
 }
