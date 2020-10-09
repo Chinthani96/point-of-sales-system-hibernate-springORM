@@ -29,7 +29,7 @@ public class AppInitializer extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        Parent root = FXMLLoader.load(this.getClass().getResource("/lk/ijse/dep/pos/view/MainForm.fxml"));
+        Parent root = FXMLLoader.load(this.getClass().getResource("/view/MainForm.fxml"));
         Scene mainScene = new Scene(root);
         primaryStage.setScene(mainScene);
         primaryStage.centerOnScreen();

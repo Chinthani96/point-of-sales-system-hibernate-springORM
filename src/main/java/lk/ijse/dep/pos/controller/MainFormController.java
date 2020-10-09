@@ -18,7 +18,7 @@ public class MainFormController {
     public Button btnSearchOrder;
 
     public void btnManageCustomer_OnAction(ActionEvent actionEvent) throws IOException {
-        Parent root  = FXMLLoader.load(this.getClass().getResource("/lk/ijse/dep/pos/view/CustomerForm.fxml"));
+        Parent root  = FXMLLoader.load(this.getClass().getResource("/view/CustomerForm.fxml"));
         Scene customerScene = new Scene(root);
         Stage mainStage = (Stage)this.root.getScene().getWindow();
         mainStage.setScene(customerScene);
@@ -27,7 +27,7 @@ public class MainFormController {
     }
 
     public void btnManageItems_OnAction(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(this.getClass().getResource("/lk/ijse/dep/pos/view/ItemForm.fxml"));
+        Parent root = FXMLLoader.load(this.getClass().getResource("/view/ItemForm.fxml"));
         Scene itemScene =  new Scene(root);
         Stage mainStage = (Stage)this.root.getScene().getWindow();
         mainStage.setScene(itemScene);
@@ -35,7 +35,7 @@ public class MainFormController {
     }
 
     public void btnPlaceOrder_OnAction(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(this.getClass().getResource("/lk/ijse/dep/pos/view/OrderDetailsForm.fxml"));
+        Parent root = FXMLLoader.load(this.getClass().getResource("/view/OrderDetailsForm.fxml"));
         Scene orderScene = new Scene(root);
         Stage mainStage = (Stage)this.root.getScene().getWindow();
         mainStage.setScene(orderScene);
@@ -43,7 +43,7 @@ public class MainFormController {
     }
 
     public void btnSearchOrder_OnAction(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(this.getClass().getResource("/lk/ijse/dep/pos/view/SearchOrderForm.fxml"));
+        Parent root = FXMLLoader.load(this.getClass().getResource("/view/SearchOrderForm.fxml"));
         Scene orderScene = new Scene(root);
         Stage mainStage = (Stage)this.root.getScene().getWindow();
         mainStage.setScene(orderScene);

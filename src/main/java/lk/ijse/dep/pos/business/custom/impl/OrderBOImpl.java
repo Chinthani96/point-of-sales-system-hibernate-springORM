@@ -13,6 +13,7 @@ import lk.ijse.dep.pos.util.CustomerTM;
 import lk.ijse.dep.pos.util.SearchOrderTM;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
+@Transactional
 public class OrderBOImpl implements OrderBO {
     @Autowired
     private OrderDAO orderDAO;

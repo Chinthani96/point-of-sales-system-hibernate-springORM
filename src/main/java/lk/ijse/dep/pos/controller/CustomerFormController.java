@@ -132,7 +132,7 @@ public class CustomerFormController {
 
     @SuppressWarnings("Duplicates")
     public void btnBack_OnAction(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(this.getClass().getResource("/lk/ijse/dep/pos/view/MainForm.fxml"));
+        Parent root = FXMLLoader.load(this.getClass().getResource("/view/MainForm.fxml"));
         Scene mainScene = new Scene(root);
         Stage mainStage = (Stage)this.root.getScene().getWindow();
         mainStage.setScene(mainScene);

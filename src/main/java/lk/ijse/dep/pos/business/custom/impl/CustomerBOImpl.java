@@ -9,12 +9,14 @@ import org.hibernate.Transaction;
 import lk.ijse.dep.pos.util.CustomerTM;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 @Component
+@Transactional
 public class CustomerBOImpl implements CustomerBO {
 
     @Autowired
